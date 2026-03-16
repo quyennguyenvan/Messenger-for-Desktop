@@ -1,0 +1,58 @@
+clone_depth: 10
+skip_tags: true
+
+branches:
+  only:
+    - staging
+    - deploy
+
+init:
+  - git config --global core.autocrlf input
+
+environment:
+  SIGNTOOL_PATH: 'C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Bin/SignTool.exe'
+  MAKENSIS_PATH: 'C:/Program Files (x86)/NSIS/makensis.exe'
+  SIGN_WIN_CERTIFICATE_FILE: 'C:/foss_ar_sha2.pfx'
+  SIGN_WIN_CERTIFICATE_PASSWORD:
+    secure: jZHktkydPALqcwx36cBY1g==
+  AWS_ACCESS_KEY_ID:
+    secure: N30cC1yCbVB5vUl+NFuwIabBhTkBczemO2udimmIfQ4=
+  AWS_SECRET_ACCESS_KEY:
+    secure: DSp24Yb5sVd311kCztsFoIKFOiwFuVuQmdcNF1B8p+I1uL3z08G53DKmiGbtsXfl
+  BINTRAY_API_KEY:
+    secure: e+l7MfTu+t2nHFKcpHEz5LgYiVypOVtYnfssYkJ3n+Wno/cldvI+l0jbLosVpQAx
+  GITHUB_TOKEN:
+    secure: 6IU2moI6jYacITwNSUyxIEbeDjkXgBO1SC3HjFMtdyMwpxgJw+2AdUD5Um+J5DNq
+  SENTRY_DSN_PRIVATE:
+    secure: TATf2W4rkZJb3TtKXszFb0zUtXoI90pTtIXDeNaXF15fNpSIaOwP77P/3Akn+8so8kg0VQWFFuYUrMZqW3NByT2xr1/fE+kXyBz/FUVV8N0OfEl6lHcWHznYWczJW8uN
+  PIWIK_SERVER_URL:
+    secure: OSFCKJBPssEPIO/kA78OTrW6t+YkxTgSg06To+mKawr+VbUeQBgf+HkW1MWSirEF
+  SQUIRREL_UPDATES_URL:
+    secure: BNlChGRei/OKFGO3EQIc2yVSlm11vzsw/Uz65zjTUw4Ir3FfSlHOY02WMhPBI6Su
+  IS_IC_FUSION_STR_AUTH_KEY:
+    secure: f4/NteGvX06zQmrNCd4DF6jRHcKNaVGMEQVmL+vt+BJw6aV/F/JvyKagJPV6pX0nSSLCYXWl4MTbPh14Mz3TJRV6OwbFM5zA7zsAQL97aXLq/0R2d1THMvHPx3aTxN51fiV1KI+gb/VWoHA7RKTWDTAWu3hybDokBHJ4tFJtgoXL0TPqgzh+YZCQx0sUEHGh2qkYPEXdKaby7emRY/bernlXeAGb7hGC3NL2sMKKzs8SfwbwSLvR3Tc32bFPbi3Iu/o9ctyLbLNKpupSnbRZeXcbRhMHeZ2cX9R5TcaNGGToMkB0PxrmNG1QPkE9PtVnxoTpgMVfb4dl0mBwEFyZR71MYU9XtYIEjzF+L/f6TF3xJ4ayRk+WRSc7Ro0YpG6Z
+
+cache:
+  - "node_modules -> package.json"
+  - "src\\node_modules -> src\\package.json"
+  - "cache -> src\\package.json"
+  - "%APPDATA%\\npm-cache"
+
+install:
+  - npm install -g npm@3
+  - set PATH=%APPDATA%\npm;%PATH%
+  - npm install -g gulp
+  - npm install
+
+build: off
+
+test_script:
+  - npm test
+
+deploy_script:
+  - if "%APPVEYOR_REPO_BRANCH%" == "staging" ciscripts\appveyor\build_staging.cmd
+  - if "%APPVEYOR_REPO_BRANCH%" == "deploy" ciscripts\appveyor\build_deploy.cmd
+
+notifications:
+  - provider: Webhook
+    url: https://webhooks.gitter.im/e/2d3662c4ab6e4f2fc46e

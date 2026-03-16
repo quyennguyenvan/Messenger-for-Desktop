@@ -1,0 +1,115 @@
+{
+  "name": "messengerfordesktop",
+  "dependencies": {
+    "asar": "0.13.0",
+    "async": "2.1.5",
+    "babel-plugin-default-import-checker": "1.0.8",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-es2015": "6.22.0",
+    "babel-preset-stage-0": "6.22.0",
+    "beeper": "1.1.1",
+    "coffee-script": "1.12.4",
+    "colors": "1.1.2",
+    "cross-spawn": "5.1.0",
+    "del": "2.2.2",
+    "electron-windows-installer": "1.4.4",
+    "fs-extra-promise": "0.4.1",
+    "gulp": "3.9.1",
+    "gulp-babel": "6.1.2",
+    "gulp-electron-downloader": "0.1.6",
+    "gulp-filter": "5.0.0",
+    "gulp-github-release": "1.2.1",
+    "gulp-gzip": "1.4.0",
+    "gulp-header": "1.8.8",
+    "gulp-if": "2.0.2",
+    "gulp-less": "3.3.0",
+    "gulp-mustache": "2.3.0",
+    "gulp-plumber": "1.1.0",
+    "gulp-rename": "1.2.2",
+    "gulp-sourcemaps": "2.4.1",
+    "gulp-tar": "1.9.0",
+    "gulp-zip": "4.0.0",
+    "moment": "2.17.1",
+    "rcedit": "0.8.0",
+    "request": "2.81.0",
+    "require-dir": "0.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-proposal-function-bind": "^7.27.1",
+    "@babel/preset-env": "^7.29.0",
+    "@electron/notarize": "^2.5.0",
+    "babel-eslint": "7.1.1",
+    "coffeelint": "1.16.0",
+    "electron": "^32.3.3",
+    "electron-builder": "^26.8.1",
+    "eslint": "3.17.1",
+    "eslint-config-standard": "7.0.1",
+    "eslint-plugin-babel": "4.1.1",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "2.1.1",
+    "less": "^4.6.4",
+    "lesshint": "3.1.0",
+    "minimatch": "^10.2.4",
+    "mustache": "^4.2.0"
+  },
+  "optionalDependencies": {
+    "appdmg": "0.4.5"
+  },
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "npm run lint-js && npm run lint-coffee && npm run lint-less",
+    "lint-js": "eslint src/scripts",
+    "lint-coffee": "coffeelint tasks/",
+    "lint-less": "lesshint src/styles/",
+    "build:app": "node scripts/build-app.js",
+    "build:mac": "npm run build:app && electron-builder --mac --arm64 --dir --publish never",
+    "dist:mac": "npm run build:app && electron-builder --mac --arm64 --publish never"
+  },
+  "build": {
+    "productName": "Messenger for Desktop",
+    "appId": "com.aluxian.messengerfd",
+    "directories": {
+      "app": "app",
+      "output": "dist-electron-builder"
+    },
+    "afterSign": "scripts/notarize.js",
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "hardenedRuntime": true,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ]
+    }
+  },
+  "license": "MIT",
+  "author": "Alexandru Rosianu <me@aluxian.com>",
+  "homepage": "https://messengerfordesktop.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aluxian/Messenger-for-Desktop.git"
+  },
+  "icon": {
+    "url": "https://raw.githubusercontent.com/aluxian/Messenger-for-Desktop/master/resources/win/app.ico"
+  },
+  "bintray": {
+    "subject": "aluxian",
+    "artifactsRepoName": "artifacts"
+  },
+  "bugs": {
+    "url": "https://github.com/aluxian/Messenger-for-Desktop/issues"
+  }
+}

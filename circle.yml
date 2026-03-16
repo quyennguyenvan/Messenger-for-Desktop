@@ -1,0 +1,30 @@
+general:
+  branches:
+    ignore:
+      - master
+
+machine:
+  node:
+    version: 5.5.0
+
+dependencies:
+  override:
+    - npm install --only=dev
+  cache_directories:
+    - node_modules
+    - src/node_modules
+    - cache
+
+deployment:
+  staging:
+    branch: staging
+    commands:
+      - ./ciscripts/circleci/build_staging.sh
+  deploy:
+    branch: deploy
+    commands:
+      - ./ciscripts/circleci/build_deploy.sh
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/b94a0478e4beab0c6801

@@ -1,0 +1,95 @@
+{
+  "name": "messengerfordesktop",
+  "productName": "Messenger for Desktop",
+  "version": "2.0.9",
+  "versionChannel": "stable",
+  "description": "A simple & beautiful desktop client for Facebook Messenger.",
+  "wvUrl": "https://www.messenger.com/login",
+  "wvUrlWork": "https://work.facebook.com/chat",
+  "main": "./scripts/browser/init.js",
+  "dependencies": {
+    "@electron/remote": "^2.1.3",
+    "app-module-path": "2.2.0",
+    "babel-runtime": "6.23.0",
+    "colors": "1.1.2",
+    "debug": "2.6.2",
+    "del": "2.2.2",
+    "fs-extra-promise": "0.4.1",
+    "keymirror": "0.1.1",
+    "launchd.plist": "0.0.1",
+    "lodash.debounce": "4.0.8",
+    "mousetrap": "1.6.0",
+    "needle": "1.5.2",
+    "node-uuid": "1.4.7",
+    "promisify-es6": "1.0.2",
+    "raven": "1.1.4",
+    "raven-js": "3.12.1",
+    "semver": "5.3.0",
+    "strip-ansi": "3.0.1",
+    "winreg": "1.2.3",
+    "yargs": "7.0.2"
+  },
+  "devDependencies": {
+    "devtron": "1.4.0",
+    "source-map-support": "0.4.11"
+  },
+  "optionalDependencies": {},
+  "updater": {
+    "urls": {
+      "darwin": "/update/%CHANNEL%/darwin?version=%CURRENT_VERSION%",
+      "win32": "/update/%CHANNEL%/win32",
+      "linux": "/update/%CHANNEL%/linux"
+    }
+  },
+  "packages": {
+    "osx64": "https://updates.messengerfordesktop.com/download/darwin/latest",
+    "win32": "https://updates.messengerfordesktop.com/download/win32/latest",
+    "linux32": "https://updates.messengerfordesktop.com/download/linux/latest?arch=i386&pkg=deb",
+    "linux64": "https://updates.messengerfordesktop.com/download/linux/latest?arch=amd64&pkg=deb"
+  },
+  "darwin": {
+    "bundleId": "com.aluxian.messengerfd",
+    "appCategoryType": "public.app-category.social-networking"
+  },
+  "linux": {
+    "genericName": "Internet Messenger",
+    "categories": "Network;InstantMessaging;",
+    "keywords": "Facebook;Messenger;chat;desktop;",
+    "section": "web"
+  },
+  "license": "MIT",
+  "author": "MessengerForDesktop.com <hello@messengerfordesktop.com>",
+  "authorName": "MessengerForDesktop.com",
+  "copyright": "Copyright © MessengerForDesktop.com",
+  "homepage": "https://messengerfordesktop.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aluxian/Messenger-for-Desktop.git"
+  },
+  "changelogUrl": "https://github.com/aluxian/Messenger-for-Desktop/releases/tag/v%CURRENT_VERSION%",
+  "virtualUrl": "http://app.messengerfordesktop.com",
+  "piwik": {
+    "serverUrl": "",
+    "siteId": "2"
+  },
+  "sentry": {
+    "dsn": ""
+  },
+  "electronVersion": "v1.4.15",
+  "distrib": "unset",
+  "portable": false,
+  "buildNum": 0,
+  "dev": true,
+  "themes": {
+    "default": "Default",
+    "dark": "Dark",
+    "black": "Black",
+    "midnight": "Midnight",
+    "mosaic": "Mosaic"
+  },
+  "darkThemes": [
+    "dark",
+    "black",
+    "midnight"
+  ]
+}

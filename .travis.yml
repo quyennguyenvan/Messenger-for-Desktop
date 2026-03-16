@@ -1,0 +1,46 @@
+git:
+  depth: 10
+
+branches:
+  only:
+    - staging
+    - deploy
+
+os:
+  - osx
+
+osx_image: xcode7.3
+language: objective-c
+compiler: clang
+sudo: false
+
+env:
+  global:
+    - SIGN_DARWIN_KEYCHAIN_NAME=travis.keychain
+    - SIGN_DARWIN_KEYCHAIN_PASSWORD=travis
+
+install:
+  - git clone https://github.com/creationix/nvm.git /tmp/.nvm
+  - source /tmp/.nvm/nvm.sh
+  - nvm install 5.5
+  - nvm use 5.5
+  - npm install -g gulp
+  - npm install
+
+before_script:
+  - npm test
+
+script:
+  - if [[ $TRAVIS_BRANCH == 'staging' ]]; then ./ciscripts/travis/build_staging.sh; fi
+  - if [[ $TRAVIS_BRANCH == 'deploy' ]]; then ./ciscripts/travis/build_deploy.sh; fi
+
+cache:
+  directories:
+    - node_modules
+    - src/node_modules
+    - cache
+
+notifications:
+  email: false
+  webhooks:
+    - https://webhooks.gitter.im/e/9d5d42078307e6548093

@@ -1,0 +1,122 @@
+if (process.type === 'browser') { try { require('source-map-support').install(); } catch(ignored) {} }
+var log = require('common/utils/logger').debugLogger(__filename); var logError = require('common/utils/logger').errorLogger(__filename, false); var logFatal = require('common/utils/logger').errorLogger(__filename, true);
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _electron = require("electron");
+var _spellchecker = require("common/utils/spellchecker");
+var _platform = _interopRequireDefault(require("common/utils/platform"));
+function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+let availableLanguages = null;
+const defaults = {
+  'analytics-track': true,
+  'analytics-uid': null,
+  'launch-startup': false,
+  'launch-startup-hidden': true,
+  'launch-quit': false,
+  'links-in-browser': true,
+  'switch-workplace': false,
+  'block-seen-typing': false,
+  'close-with-esc': false,
+  'quit-behaviour-taught': false,
+  'notify-app-updated': false,
+  'show-notifications-badge': true,
+  'show-tray': _platform.default.isWindows,
+  'show-dock': true,
+  'auto-hide-menubar': false,
+  'sidebar-auto-hide': false,
+  'spell-checker-check': false,
+  'spell-checker-auto-correct': false,
+  'spell-checker-language': defaultSpellCheckerLanguage,
+  'theme': 'default',
+  'updates-auto-check': true,
+  'updates-channel': global.manifest.versionChannel,
+  'window-bounds': {
+    width: 920,
+    height: 610
+  },
+  'window-full-screen': false,
+  'accept-first-mouse': false,
+  'zoom-level': 0
+};
+function get(key) {
+  if (key === 'spell-checker-language') {
+    const valueFn = defaults[key];
+    if (typeof valueFn === 'function') {
+      if (global.ready) {
+        defaults[key] = valueFn();
+        return defaults[key];
+      } else {
+        return valueFn();
+      }
+    }
+  }
+  return defaults[key];
+}
+function defaultSpellCheckerLanguage() {
+  let defaultLanguage = null;
+  if (!availableLanguages) {
+    availableLanguages = (0, _spellchecker.getAvailableDictionaries)();
+  }
+
+  // Try to get it from app
+  if (global.ready) {
+    defaultLanguage = _electron.app.getLocale();
+    if (typeof defaultLanguage === 'string') {
+      defaultLanguage = defaultLanguage.replace('-', '_');
+      defaultLanguage = validateLanguage(defaultLanguage);
+      if (defaultLanguage) {
+        return defaultLanguage;
+      }
+    }
+    defaultLanguage = null;
+  }
+
+  // Try to get it from env
+  if (typeof process.env.LANG === 'string') {
+    defaultLanguage = process.env.LANG.split('.')[0];
+    defaultLanguage = defaultLanguage.replace('-', '_');
+    defaultLanguage = validateLanguage(defaultLanguage);
+    if (defaultLanguage) {
+      return defaultLanguage;
+    }
+    defaultLanguage = null;
+  }
+
+  // Try to use en
+  const langEn = validateLanguage('en');
+  if (langEn) {
+    return langEn;
+  }
+
+  // Try to use en-us
+  const langEnUs = validateLanguage('en_US');
+  if (langEnUs) {
+    return langEnUs;
+  }
+
+  // Try to use the first available language
+  if (availableLanguages.length) {
+    return availableLanguages[0];
+  }
+
+  // Use the default
+  return 'en_US';
+}
+function validateLanguage(lang) {
+  if (availableLanguages.includes(lang)) {
+    return lang;
+  } else {
+    lang = lang.split('_')[0];
+    if (availableLanguages.includes(lang)) {
+      return lang;
+    }
+  }
+  return null;
+}
+var _default = exports.default = {
+  get
+};
